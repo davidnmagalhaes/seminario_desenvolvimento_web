@@ -1,6 +1,5 @@
 import { NewContainer } from './styles';
 import { formatarDataBrasileira } from '../../utils/formatDate';
-import { categories } from '../../utils/constants';
 import { useContext } from 'react';
 import { AppContext } from '../../contexts/AppContext';
 import NewsListProps from '../../types/NewsListPropsType';
@@ -11,13 +10,14 @@ export const News = ({ category, news }: NewsListProps) => {
 
   if (category === '') {
     listOfNews = news.sort((a, b) => {
-      return new Date(b.date).getTime() - new Date(a.date).getTime();
+      return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
     });
+    console.log(listOfNews);
   } else {
     listOfNews = news
-      .filter((newsItem) => newsItem.category === category)
+      .filter((newsItem) => String(newsItem.category_id) === category)
       .sort((a, b) => {
-        return new Date(b.date).getTime() - new Date(a.date).getTime();
+        return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
       });
   }
 
@@ -30,10 +30,10 @@ export const News = ({ category, news }: NewsListProps) => {
           return (
             <li key={key}>
               <div className="infoData">{`${formatarDataBrasileira(
-                new Date(newsItem.date)
-              )} | ${categories[newsItem.category].label}`}</div>
+                new Date(newsItem.created_at)
+              )} | ${newsItem.category_name}`}</div>
               <h2>{newsItem.title}</h2>
-              <p>{newsItem.description}</p>
+              <p>{newsItem.content}</p>
             </li>
           );
         })}

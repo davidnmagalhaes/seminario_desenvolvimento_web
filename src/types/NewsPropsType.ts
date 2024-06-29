@@ -1,10 +1,10 @@
 interface NewsProps {
   id?: number;
   title: string;
-  description: string;
-  date: string;
-  author: string;
-  category: string;
+  content: string;
+  created_at: string;
+  category_name?: string;
+  category_id: string;
 }
 
 export default NewsProps;

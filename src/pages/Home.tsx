@@ -1,18 +1,30 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import FloatingAddButton from '../components/FloatButton';
 import { News } from '../components/News';
 import { Topbar } from '../components/Topbar';
-import newsMock from '../mocks/news.json';
 import { NewsForm } from '../components/NewsForm';
 import NewsProps from '../types/NewsPropsType';
+import api from '../services/api';
 
 export const Home = () => {
   // Se o estado category estiver com string vazia todas as notícias serão exibidas
   const [category, setCategory] = useState('');
-  // O estado news lista as notícias mocadas por padrão vindo de um arquivo JSON
-  const [news, setNews] = useState(newsMock as NewsProps[]);
+  // O estado news lista as notícias, inicializando por padrão com um array vazio
+  const [news, setNews] = useState<NewsProps[]>([]);
   // O estado isModalOpen controla a abertura e fechamento do modal
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  useEffect(() => {
+    // Função que é executada quando o componente é montado
+    const fetchNews = async () => {
+      // Simula uma requisição a uma API
+      const response = await api.get('/news');
+      // Atualiza o estado news com a lista de notícias vinda da API
+      setNews(response.data);
+    };
+
+    fetchNews();
+  }, []);
 
   // Função que é executada quando o botão de adicionar notícia é clicado
   const handleAddClick = () => {
@@ -30,9 +42,14 @@ export const Home = () => {
   };
 
   // Função que é executada quando o formulário do modal é submetido
-  const onSubmit = (values: NewsProps) => {
-    setNews([...news, values]);
-    setIsModalOpen(false);
+  const onSubmit = async (values: NewsProps) => {
+    try{
+      const response = await api.post('/news', values);
+      setNews([...news, response.data]);
+      setIsModalOpen(false);
+    }catch (error){
+      console.log(error);
+    }
   };
 
   return (

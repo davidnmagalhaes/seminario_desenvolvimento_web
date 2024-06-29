@@ -20,18 +20,16 @@ export const NewContainer = styled.div`
     li {
       display: flex;
       flex-direction: column;
-      justify-content: start;
+      justify-content: center;
       align-items: center;
       width: 32.6%;
       border-radius: 15px;
-
       overflow: hidden;
       text-overflow: ellipsis;
-
       height: 20vh;
       border: 1px solid #000;
       margin: 10px 0;
-      padding: 35px;
+      padding: 0 35px;
       text-align: center;
 
       h2 {
